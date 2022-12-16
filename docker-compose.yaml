@@ -1,0 +1,12 @@
+services:
+  db:
+    build: dev-db
+    ports:
+        - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: starting-strength
+
+volumes:
+  starting-strength-data:
