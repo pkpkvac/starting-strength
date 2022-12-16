@@ -71,6 +71,8 @@ model Weights {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   day       Int      @default(0)
+
+  @@index([userId], name: "userId")
 }
 
 model VerificationToken {

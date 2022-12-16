@@ -37,7 +37,7 @@ const Home: NextPage = () => {
     resolver: zodResolver(schema),
   });
 
-  const weightQuery = trpc.weights.getWeights.useQuery()
+  const weightQuery = trpc.weights.getWeights.useQuery();
 
   // const {
   //   mutate: submitWeights,
@@ -45,18 +45,24 @@ const Home: NextPage = () => {
   //   isLoading,
   // } = trpc.useMutation("weights.updateWeights");
   // signOut();
-const mutation =  trpc.weights.updateWeights.useMutation({onSuccess: async(payload) => {
-  console.log(payload)
-}})
+  const mutation = trpc.weights.updateWeights.useMutation({
+    onSuccess: async (payload) => {
+      console.log(payload);
+    },
+  });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    console.log(weightQuery.data);
-   
-    const res = await mutation.mutate({userId: 'Jo', weights: data})
+    const weights = {
+      squat: data.squat,
+      deadlift: data.deadlift,
+      bench: data.bench,
+      clean: data.clean,
+      press: data.press,
+    };
+
+    const res = await mutation.mutate({ weights });
 
     console.log(res);
-    
 
     // submitWeights({ weights: data });
   });
