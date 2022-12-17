@@ -2,8 +2,28 @@ import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const weightsRouter = router({
-  getWeights: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
+  getWeights: protectedProcedure.query(async ({ ctx }) => {
+    const { prisma } = ctx;
+
+    if (!ctx.session.user) {
+      throw new Error("Not authenticated");
+    }
+
+    try {
+      const res = await prisma.weights.findFirst({
+        where: { userId: ctx.session.user.id },
+      });
+
+      return {
+        success: true,
+        payload: res,
+      };
+    } catch (e) {
+      return {
+        error: "event not found",
+        status: 404,
+      };
+    }
   }),
   updateWeights: protectedProcedure
     .input(
@@ -30,8 +50,10 @@ export const weightsRouter = router({
       }
 
       try {
-        const res = await prisma.weights.create({
-          data: { userId: ctx.session.user.id, weights },
+        const res = await prisma.weights.upsert({
+          where: { userId: ctx.session.user.id },
+          update: { weights },
+          create: { userId: ctx.session.user.id, weights },
         });
         console.log("YYYYYY");
         console.log(res);

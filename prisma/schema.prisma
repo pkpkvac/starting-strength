@@ -57,22 +57,21 @@ model User {
   image               String?
   accounts            Account[]
   sessions            Session[]
+  weights             Weights?
   // workouts            Workout[]
   // usersWorkouts       UsersWorkouts[]
   // userEvents          UserEvents[]
-  Weights             Weights[]
+  weightsId           String?
 }
 
 model Weights {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String   @unique
   user      User     @relation(fields: [userId], references: [id])
   weights   Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   day       Int      @default(0)
-
-  @@index([userId], name: "userId")
 }
 
 model VerificationToken {
