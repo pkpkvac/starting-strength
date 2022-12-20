@@ -52,8 +52,8 @@ export const weightsRouter = router({
       try {
         const res = await prisma.weights.upsert({
           where: { userId: ctx.session.user.id },
-          update: { weights },
-          create: { userId: ctx.session.user.id, weights },
+          update: { weights, day: { increment: 1 } },
+          create: { userId: ctx.session.user.id, weights, day: 0 },
         });
         console.log("YYYYYY");
         console.log(res);

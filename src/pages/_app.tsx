@@ -5,7 +5,9 @@ import { SessionProvider } from "next-auth/react";
 import Layout from "@/components/Layout";
 
 // globals should be last to override any styles
-import "../styles/globals.css";
+import "@/styles/tailwind-forms.scss";
+import "@/styles/globals.scss";
+
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { trpc } from "@/utils/trpc";
@@ -21,9 +23,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
       router.push("/");
     }
   }, [session]);
-  // if (!session) {
-  //   router.push("/");
-  // }
 
   return (
     <SessionProvider session={session}>

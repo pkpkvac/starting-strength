@@ -10,6 +10,8 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import { trpc } from "@/utils/trpc";
 import Router, { useRouter } from "next/router";
+import format from "date-fns/format";
+import Exercises from "@/components/Workout";
 
 const schema = z.object({
   squat: z
@@ -29,7 +31,7 @@ const schema = z.object({
     .min(45, { message: "This app is only for those who press" }),
 });
 
-const Home: NextPage = () => {
+const Workout: NextPage = () => {
   const router = useRouter();
 
   const {
@@ -40,8 +42,9 @@ const Home: NextPage = () => {
     resolver: zodResolver(schema),
   });
 
-  const lastWeights =
-    trpc.weights.getWeights.useQuery()?.data?.payload?.weights;
+  const lastWeights = trpc.weights.getWeights.useQuery()?.data?.payload;
+  console.log(lastWeights?.weights);
+
   // console.log(weightQuery.data?.payload?.weights);
 
   // const {
@@ -75,52 +78,87 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <WithViewHeader backHref="/" title="Generate Routine">
+      <WithViewHeader backHref="/" title="Today's routine">
         <Head>
-          <title>Generate Routine</title>
+          <title>{`Today's Routine`}</title>
         </Head>
         <div className="mb-10 flex h-min w-3/4 flex-col justify-between justify-self-center rounded-3xl bg-primary-light px-14 pt-14 pb-2">
           {/* title */}
           <div className="mb-5 flex flex-col gap-5 text-left font-bold text-white">
-            <p className="">Generate Novice Linear Progression</p>
-            <p className="">Starting Weight (lbs)</p>
+            <p className="">{format(Date.now(), "E, MMM dd, yyyy ")}</p>
+            <p className="">{`Week ${
+              Math.floor((lastWeights?.day || 0) / 3) + 1
+            }, Day ${lastWeights?.day}`}</p>
           </div>
 
           {/* weights */}
           <form
+            className="flex flex-col gap-10"
             id="starting-weight"
             action="#"
             method="POST"
             onSubmit={onSubmit}
           >
+            {/* TODO: THIS NEEDS TO BE A COMPONENT AND CLEANED UP */}
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-4">
-                <label className="font-bold text-white">Squat</label>
-                <div className="flex gap-4">
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "60px",
-                      height: "60px",
-                    }}
-                  >
-                    <Image
-                      className="rounded-full"
-                      src={"/ss_squat.png"}
-                      fill
-                      alt="squat_icon"
-                      style={{ objectFit: "cover" }}
-                    />
+                <Exercises register={register} lastWeights={lastWeights} />
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-between gap-4 text-white">
+                  <div>
+                    <label className="font-bold text-white">Press</label>
+                    <div
+                      style={{
+                        position: "relative",
+                        width: "60px",
+                        height: "60px",
+                      }}
+                    >
+                      <Image
+                        className="rounded-full"
+                        src={"/ss_press.png"}
+                        fill
+                        alt="press_icon"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
                   </div>
-                  <input
-                    type="number"
-                    id="squat"
-                    className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder={lastWeights?.squat.toString() || ""}
-                    {...register("squat", {
-                      setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
-                    })}
-                  />
+                  <div>
+                    <label className="font-bold text-white">Weights</label>
+                    <ul>
+                      <li>{`${lastWeights?.weights?.press + 5} x 5`}</li>
+                      <li>{`${lastWeights?.weights?.press + 5} x 5`}</li>
+                      <li>{`${lastWeights?.weights?.press + 5} x 5`}</li>
+                    </ul>
+                  </div>
+                  <div className="flex flex-col text-center">
+                    <label className="font-bold text-white">Success</label>
+                    <div>
+                      <input
+                        type="checkbox"
+                        id="press"
+                        checked={true}
+                        // className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        // placeholder={lastWeights?.weights.squat.toString() || ""}
+                        {...register("press")}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col text-center">
+                    <label className="font-bold text-white">Stall</label>
+                    <div>
+                      <input
+                        type="checkbox"
+                        id="press"
+                        checked={true}
+                        // className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        // placeholder={lastWeights?.weights.squat.toString() || ""}
+                        {...register("press")}
+                      />
+                    </div>
+                  </div>
                 </div>
                 {errors.squat?.message && (
                   <p className="text-error-light">
@@ -128,40 +166,7 @@ const Home: NextPage = () => {
                   </p>
                 )}
               </div>
-              <div className="flex flex-col gap-4">
-                <label className="font-bold text-white">Press</label>
-                <div className="flex gap-4">
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "60px",
-                      height: "60px",
-                    }}
-                  >
-                    <Image
-                      className="rounded-full"
-                      src={"/ss_press.png"}
-                      fill
-                      alt="press_icon"
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                  <input
-                    type="number"
-                    id="press"
-                    className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder={lastWeights?.press.toString() || ""}
-                    {...register("press", {
-                      setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
-                    })}
-                  />
-                </div>
-                {errors.press?.message && (
-                  <p className="text-error-light">
-                    {errors.press?.message.toString()}
-                  </p>
-                )}
-              </div>
+
               {/* </div> */}
               {/* <div className="flex gap-4"> */}
               <div className="flex flex-col gap-4">
@@ -186,7 +191,7 @@ const Home: NextPage = () => {
                     type="number"
                     id="bench"
                     className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder={lastWeights?.bench.toString() || ""}
+                    placeholder={lastWeights?.weights.bench.toString() || ""}
                     {...register("bench", {
                       setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
                     })}
@@ -220,7 +225,7 @@ const Home: NextPage = () => {
                     type="number"
                     id="clean"
                     className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder={lastWeights?.clean.toString() || ""}
+                    placeholder={lastWeights?.weights.clean.toString() || ""}
                     {...register("clean", {
                       setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
                     })}
@@ -256,7 +261,9 @@ const Home: NextPage = () => {
                       type="number"
                       id="deadlift"
                       className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      placeholder={lastWeights?.deadlift.toString() || ""}
+                      placeholder={
+                        lastWeights?.weights.deadlift.toString() || ""
+                      }
                       {...register("deadlift", {
                         setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
                       })}
@@ -270,16 +277,26 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
+            <div className="flex flex-col">
+              <label className="font-bold text-white">Notes</label>
+              <textarea
+                id="notes"
+                rows={4}
+                className="block w-full flex-1 rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder=""
+                {...register("notes")}
+              />
+            </div>
             <div className="flex justify-center ">
               <Button
                 size="lg"
                 isLoading={isLoading}
                 type="submit"
-                className="mt-8 mb-8 flex-1 justify-center"
+                className="mt-8 mb-8 flex-1 justify-center rounded-full"
                 textColor="text-white"
-                variant="primary"
+                variant="secondary"
               >
-                Generate Novice LP
+                Save Workout
               </Button>
             </div>
           </form>
@@ -289,4 +306,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Workout;
