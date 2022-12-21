@@ -54,6 +54,17 @@ export default function Exercise({ exercise, register }) {
             <li>{`${weight} x 5`}</li>
           </ul>
         </div>
+
+        <div className="flex flex-col text-center">
+          <label className="font-bold text-white">Plates</label>
+          <p>45x1</p>
+          <p>35x1</p>
+          <p>35x1</p>
+          <p>35x1</p>
+          <p>2.5x1</p>
+
+          {/* <Platebreakdown weight={weight} /> */}
+        </div>
         <div className="flex flex-col text-center">
           <label className="font-bold text-white">Complete</label>
           <div>

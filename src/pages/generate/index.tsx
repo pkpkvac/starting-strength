@@ -7,9 +7,8 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/components/Button";
-import { useState } from "react";
 import { trpc } from "@/utils/trpc";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const schema = z.object({
   squat: z
@@ -42,14 +41,7 @@ const Home: NextPage = () => {
 
   const lastWeights =
     trpc.weights.getWeights.useQuery()?.data?.payload?.weights;
-  // console.log(weightQuery.data?.payload?.weights);
 
-  // const {
-  //   mutate: submitWeights,
-  //   data,
-  //   isLoading,
-  // } = trpc.useMutation("weights.updateWeights");
-  // signOut();
   const { mutate: updateWeights, isLoading } =
     trpc.weights.updateWeights.useMutation({
       onSuccess: () => {
@@ -66,11 +58,7 @@ const Home: NextPage = () => {
       press: data.press,
     };
 
-    const res = await updateWeights({ weights });
-
-    console.log(res);
-
-    // submitWeights({ weights: data });
+    updateWeights({ weights });
   });
 
   return (
@@ -83,7 +71,7 @@ const Home: NextPage = () => {
           {/* title */}
           <div className="mb-5 flex flex-col gap-5 text-left font-bold text-white">
             <p className="">Generate Novice Linear Progression</p>
-            <p className="">Starting Weight (lbs)</p>
+            <p className="">Starting Weight for 5 reps (lbs)</p>
           </div>
 
           {/* weights */}

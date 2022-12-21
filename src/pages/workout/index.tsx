@@ -12,6 +12,7 @@ import { trpc } from "@/utils/trpc";
 import Router, { useRouter } from "next/router";
 import format from "date-fns/format";
 import Exercises from "@/components/Exercises";
+import Accessories from "@/components/Accessories";
 
 const schema = z.object({
   squat: z.boolean().optional(),
@@ -20,6 +21,7 @@ const schema = z.object({
   clean: z.boolean().optional(),
   press: z.boolean().optional(),
   notes: z.string().optional(),
+  accessories: z.string().optional(),
 });
 
 const Workout: NextPage = () => {
@@ -92,7 +94,8 @@ const Workout: NextPage = () => {
           >
             {/* Exercises */}
             <Exercises register={register} lastWeights={lastWeights} />
-            {/* Exercises */}
+            {/* Accessories*/}
+            <Accessories register={register} lastWeights={lastWeights} />
             <div className="flex flex-col">
               <label className="font-bold text-white">Notes</label>
               <textarea
