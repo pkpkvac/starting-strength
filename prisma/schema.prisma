@@ -71,7 +71,7 @@ model Weights {
   weights   Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  day       Int      @default(0)
+  day       Int      @default(1)
 }
 
 model VerificationToken {
