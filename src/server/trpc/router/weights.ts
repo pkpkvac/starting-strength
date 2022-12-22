@@ -29,20 +29,21 @@ export const weightsRouter = router({
     .input(
       z.object({
         weights: z.object({
-          squat: z.number(),
-          bench: z.number(),
-          deadlift: z.number(),
-          press: z.number(),
-          clean: z.number(),
+          squat: z.number().optional(),
+          bench: z.number().optional(),
+          deadlift: z.number().optional(),
+          press: z.number().optional(),
+          clean: z.number().optional(),
+          row: z.number().optional(),
+          curl: z.number().optional(),
+          tricep: z.number().optional(),
+          incline: z.number().optional(),
+          chinup: z.number().optional(),
         }),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      console.log("input");
-      console.log(input);
-      console.log("input");
-      console.log("input");
-      const { weights } = input;
+      let { weights } = input;
       const { prisma } = ctx;
 
       if (!ctx.session.user) {
@@ -50,15 +51,20 @@ export const weightsRouter = router({
       }
 
       try {
-        const res = await prisma.weights.upsert({
+        const oldWeights = await prisma.weights.findFirst({
+          where: { userId: ctx.session.user.id },
+        });
+
+        if (oldWeights?.weights && typeof oldWeights?.weights === "object") {
+          weights = { ...oldWeights.weights, ...weights };
+        }
+
+        await prisma.weights.upsert({
           where: { userId: ctx.session.user.id },
           update: { weights, day: { increment: 1 } },
           create: { userId: ctx.session.user.id, weights, day: 0 },
         });
-        console.log("YYYYYY");
-        console.log(res);
       } catch (err) {
-        console.log("XXXXX");
         console.log(err);
       }
 

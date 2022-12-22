@@ -6,14 +6,15 @@ import Image from "next/image";
 
 // import Select from "react-sele
 
-const accessories = ["row", "curl", "tricep", "incline"];
-
 export default function Accessory({ accessory, register, onRemoveAccessory }) {
+  const lift = accessory.split(" - ")[0];
+  const weight = +accessory.split(" - ")[1];
+
   return (
     <div>
       <div className="flex justify-between gap-4 text-white">
         <div>
-          <label className="font-bold text-white">row</label>
+          <label className="font-bold text-white">{lift}</label>
           <div
             style={{
               position: "relative",
@@ -34,10 +35,10 @@ export default function Accessory({ accessory, register, onRemoveAccessory }) {
           <label className="font-bold text-white">Weights</label>
           <input
             type="number"
-            id="row"
-            className="block w-[90px] rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder={100}
-            {...register("row", {
+            id={lift}
+            className="block w-[90px] rounded-md border border-gray-300 p-2 text-black focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder={weight}
+            {...register(lift, {
               setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
             })}
           />

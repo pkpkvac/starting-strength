@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import plus from "@iconify-icons/ph/plus-bold";
-import Exercise from "./Exercise";
-// import Select from "react-select";
 import { Select } from "./Select";
 import Accessory from "./Accessory";
-
-const accessories = ["row", "curl", "tricep", "incline"];
 
 export default function Accessories({ lastWeights, register }) {
   const [selectedAccessory, setSelectedAccessory] = useState<string | null>(
@@ -15,35 +11,37 @@ export default function Accessories({ lastWeights, register }) {
 
   const [accessories, setAccessories] = useState<string[]>([]);
 
-  const [options, setOptions] = useState(["Chocolate", "Beef", "Brocc"]);
+  const [options, setOptions] = useState([
+    "row",
+    "curl",
+    "tricep",
+    "incline",
+    "chinup",
+  ]);
 
   useEffect(() => {
     if (lastWeights) {
       setOptions(defaultOptions);
       setSelectedAccessory(defaultOptions[0] || null);
     }
-  }, [lastWeights, accessories]);
-
-  //   console.log(selectedAccessory);
+  }, [lastWeights]);
 
   if (!lastWeights) return <></>;
 
   const defaultOptions = [
-    "Beef",
-    `Chocolate-${lastWeights.weights.bench}`,
-    "Brocc",
-    // { value: "chocolate", label: "Chocolate" },
-    // { value: "strawberry", label: "Strawberry" },
-    // { value: "vanilla", label: "Vanilla" },
+    `row - ${lastWeights.weights.row || 0}`,
+    `curl - ${lastWeights.weights.curl || 0}`,
+    `tricep - ${lastWeights.weights.tricep || 0}`,
+    `incline - ${lastWeights.weights.incline || 0}`,
+    `chinup - ${lastWeights.weights.chinup || 0}`,
   ];
-  //   console.log(lastWeights);
-  console.log(accessories);
 
   const addSelectedAccessory = () => {
     if (selectedAccessory) {
       const newOptions = options.filter(
         (option) => option !== selectedAccessory
       );
+
       setOptions(newOptions);
       setSelectedAccessory(newOptions[0] || null);
 
@@ -52,26 +50,11 @@ export default function Accessories({ lastWeights, register }) {
   };
 
   const onRemoveAccessory = (accessory: string) => {
-    console.log(accessory);
-
     const newAccessories = accessories.filter((acc) => acc !== accessory);
 
+    setOptions([...options, accessory]);
     setAccessories(newAccessories);
   };
-  //   const totalDays = lastWeights?.day;
-  //   const totalWeeks = Math.floor(lastWeights?.day / 3);
-  //   const day = totalDays - totalWeeks * 3 + 1;
-  //   const week = totalDays === 0 ? 1 : totalWeeks % 2 === 0 ? 2 : 1;
-
-  //   const dayWorkout = workoutPlan[week][day];
-
-  //   const exercises = dayWorkout.map((exercise: string) => {
-  //     return { [exercise]: lastWeights?.weights?.[exercise] + 5 };
-  //   });
-
-  //   const exerciseList = exercises.map((exercise: any, index: React.Key) => {
-  //     return <Exercise key={index} exercise={exercise} register={register} />;
-  //   });
 
   return (
     <div className="flex flex-col gap-5 font-bold text-white">
@@ -90,7 +73,6 @@ export default function Accessories({ lastWeights, register }) {
         <Select
           className="w-1/2 p-2 text-gray-600"
           name={"accessories"}
-          //   register={register}
           defaultValue={defaultOptions[0]}
           options={options}
           onClick={(e: {

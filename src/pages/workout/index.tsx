@@ -2,15 +2,12 @@ import { type NextPage } from "next";
 import Head from "next/head";
 
 import WithViewHeader from "@/components/WithViewHeader";
-import Image from "next/image";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/components/Button";
-import { useState } from "react";
 import { trpc } from "@/utils/trpc";
-import Router, { useRouter } from "next/router";
-import format from "date-fns/format";
+import { useRouter } from "next/router";
 import Exercises from "@/components/Exercises";
 import Accessories from "@/components/Accessories";
 
@@ -20,8 +17,13 @@ const schema = z.object({
   bench: z.boolean().optional(),
   clean: z.boolean().optional(),
   press: z.boolean().optional(),
+  // accessories
+  row: z.number().int().positive().optional(),
+  curl: z.number().int().positive().optional(),
+  tricep: z.number().int().positive().optional(),
+  incline: z.number().int().positive().optional(),
+
   notes: z.string().optional(),
-  accessories: z.string().optional(),
 });
 
 const Workout: NextPage = () => {
@@ -34,6 +36,8 @@ const Workout: NextPage = () => {
   } = useForm({
     resolver: zodResolver(schema),
   });
+
+  console.log(errors);
 
   const lastWeights = trpc.weights.getWeights.useQuery()?.data?.payload;
 
@@ -51,9 +55,54 @@ const Workout: NextPage = () => {
     });
 
   const onSubmit = handleSubmit(async (data) => {
+    // First update the weights table
+
+    const weights = {};
+
+    if (data.squat) {
+      weights.squat = lastWeights?.weights?.squat + 5;
+    }
+    if (data.deadlift) {
+      weights.deadlift = lastWeights?.weights?.deadlift + 10;
+    }
+    if (data.bench) {
+      weights.bench = lastWeights?.weights?.bench + 5;
+    }
+    if (data.clean) {
+      weights.clean = lastWeights?.weights?.clean + 5;
+    }
+    if (data.press) {
+      weights.press = lastWeights?.weights?.press + 5;
+    }
+    if (data.row) {
+      weights.row = data.row;
+    }
+    if (data.curl) {
+      weights.curl = data.curl;
+    }
+    if (data.tricep) {
+      weights.tricep = data.tricep;
+    }
+    if (data.incline) {
+      weights.incline = data.incline;
+    }
+    if (data.chinup) {
+      weights.chinup = data.chinup;
+    }
+
+    const workoutSummary = {
+      weights,
+      notes: data.notes,
+    };
+
+    try {
+      await updateWeights({ weights });
+    } catch (error) {
+      console.log(error);
+    }
     console.log("data");
     console.log("data");
-    console.log(data);
+    console.log(weights);
     console.log("data");
     console.log("data");
     console.log("data");

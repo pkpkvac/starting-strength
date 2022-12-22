@@ -104,7 +104,7 @@ const Home: NextPage = () => {
                     type="number"
                     id="squat"
                     className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder={lastWeights?.squat.toString() || ""}
+                    placeholder={lastWeights?.squat?.toString() || ""}
                     {...register("squat", {
                       setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
                     })}
@@ -138,7 +138,7 @@ const Home: NextPage = () => {
                     type="number"
                     id="press"
                     className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder={lastWeights?.press.toString() || ""}
+                    placeholder={lastWeights?.press?.toString() || ""}
                     {...register("press", {
                       setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
                     })}
@@ -174,7 +174,7 @@ const Home: NextPage = () => {
                     type="number"
                     id="bench"
                     className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder={lastWeights?.bench.toString() || ""}
+                    placeholder={lastWeights?.bench?.toString() || ""}
                     {...register("bench", {
                       setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
                     })}
@@ -208,7 +208,7 @@ const Home: NextPage = () => {
                     type="number"
                     id="clean"
                     className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder={lastWeights?.clean.toString() || ""}
+                    placeholder={lastWeights?.clean?.toString() || ""}
                     {...register("clean", {
                       setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
                     })}
@@ -244,7 +244,7 @@ const Home: NextPage = () => {
                       type="number"
                       id="deadlift"
                       className="block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      placeholder={lastWeights?.deadlift.toString() || ""}
+                      placeholder={lastWeights?.deadlift?.toString() || ""}
                       {...register("deadlift", {
                         setValueAs: (v) => parseInt(v === "" ? -1 : v, 10),
                       })}
