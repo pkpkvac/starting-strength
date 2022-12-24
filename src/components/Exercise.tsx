@@ -1,24 +1,9 @@
 import React, { useState } from "react";
 
 import Image from "next/image";
-// type sizes = "sm" | "md" | "lg";
-
-// // sm, md, lg
-// const sizeMap: Record<sizes, string> = {
-//   sm: "w-4 h-4",
-//   md: "w-10 h-10",
-//   lg: "w-20 h-20",
-// };
-
-// type Props = {
-//   size?: sizes;
-// };
 
 export default function Exercise({ exercise, register }) {
   const [success, setSuccess] = useState(true);
-  //   const [stalled, setStalled] = useState(false);
-
-  //   console.log(register);
 
   if (!exercise) return <></>;
 
@@ -75,6 +60,13 @@ export default function Exercise({ exercise, register }) {
               checked={!success}
               onClick={() => setSuccess(!success)}
               {...register(`${lift}`)}
+            />
+            <input
+              className="mt-4 hidden h-[30px] w-[30px]"
+              type="checkbox"
+              id={`${lift}`}
+              checked={true}
+              {...register(`${lift}-day`)}
             />
           </div>
         </div>

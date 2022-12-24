@@ -1,10 +1,22 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import { trpc } from "@/utils/trpc";
 
 import Button from "@/components/Button";
+import PastWorkout from "@/components/PastWorkout";
 
 const Home: NextPage = () => {
-  //   signOut();
+  const pastWorkouts =
+    trpc.userWorkouts.getUserWorkouts.useQuery()?.data?.payload;
+
+  const pastWorkoutsComponent = pastWorkouts
+    ?.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+    ?.map((workout) => {
+      return <PastWorkout key={workout.id} workout={workout} />;
+    });
 
   return (
     <>
@@ -21,9 +33,8 @@ const Home: NextPage = () => {
             type="internalLink"
           >{`I'm working out today`}</Button>
         </div>
-        <div className="my-10 text-center">No workout history to show</div>
+        {pastWorkoutsComponent}
       </div>
-      {/* </WithViewHeader> */}
     </>
   );
 };

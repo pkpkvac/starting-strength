@@ -47,12 +47,23 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model UserWorkouts {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  weights   Json
+  notes     String?
+  // usersWorkouts       UsersWorkouts[]
+}
+
 model User {
-  id                  String    @id @default(cuid())
+  id                  String         @id @default(cuid())
   name                String?
   role                String?
-  completedOnBoarding Boolean?  @default(false)
-  email               String?   @unique
+  completedOnBoarding Boolean?       @default(false)
+  email               String?        @unique
   emailVerified       DateTime?
   image               String?
   accounts            Account[]
@@ -62,6 +73,7 @@ model User {
   // usersWorkouts       UsersWorkouts[]
   // userEvents          UserEvents[]
   weightsId           String?
+  UserWorkouts        UserWorkouts[]
 }
 
 model Weights {

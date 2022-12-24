@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Exercise from "./Exercise";
 import format from "date-fns/format";
@@ -27,7 +27,9 @@ export default function Exercises({ lastWeights, register }) {
   const dayWorkout = workoutPlan[week][day];
 
   const exercises = dayWorkout.map((exercise: string) => {
-    return { [exercise]: lastWeights?.weights?.[exercise] + 5 };
+    return exercise === "deadlift"
+      ? { [exercise]: lastWeights?.weights?.[exercise] + 10 }
+      : { [exercise]: lastWeights?.weights?.[exercise] + 5 };
   });
 
   const exerciseList = exercises.map((exercise: any, index: React.Key) => {

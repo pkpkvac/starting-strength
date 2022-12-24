@@ -14,9 +14,13 @@ import Accessories from "@/components/Accessories";
 const schema = z.object({
   squat: z.boolean().optional(),
   deadlift: z.boolean().optional(),
+  "deadlift-day": z.boolean().optional(),
   bench: z.boolean().optional(),
+  "bench-day": z.boolean().optional(),
   clean: z.boolean().optional(),
+  "clean-day": z.boolean().optional(),
   press: z.boolean().optional(),
+  "press-day": z.boolean().optional(),
   // accessories
   row: z.number().int().positive().optional(),
   curl: z.number().int().positive().optional(),
@@ -49,31 +53,73 @@ const Workout: NextPage = () => {
   // signOut();
   const { mutate: updateWeights, isLoading } =
     trpc.weights.updateWeights.useMutation({
-      onSuccess: () => {
-        router.push("/home");
-      },
+      // onSuccess: () => {
+      //   router.push("/home");
+      // },
+    });
+
+  const { mutate: addUserWorkout, isLoading: userWorkoutLoading } =
+    trpc.userWorkouts.addUserWorkout.useMutation({
+      // onSuccess: () => {
+      //   router.push("/home");
+      // },
     });
 
   const onSubmit = handleSubmit(async (data) => {
     // First update the weights table
+
+    console.log("data");
+    console.log("data");
+    console.log(data);
+    console.log("data");
+    console.log("data");
+    console.log("data");
 
     const weights = {};
 
     if (data.squat) {
       weights.squat = lastWeights?.weights?.squat + 5;
     }
-    if (data.deadlift) {
-      weights.deadlift = lastWeights?.weights?.deadlift + 10;
+
+    if (data["deadlift-day"]) {
+      if (data.deadlift) {
+        weights.deadlift = lastWeights?.weights?.deadlift + 10;
+      } else {
+        weights.deadlift = lastWeights?.weights?.deadlift;
+      }
     }
-    if (data.bench) {
-      weights.bench = lastWeights?.weights?.bench + 5;
+
+    if (data["bench-day"]) {
+      if (data.bench) {
+        weights.bench = lastWeights?.weights?.bench + 5;
+      } else {
+        weights.bench = lastWeights?.weights?.bench;
+      }
     }
-    if (data.clean) {
-      weights.clean = lastWeights?.weights?.clean + 5;
+
+    if (data["clean-day"]) {
+      if (data.clean) {
+        weights.clean = lastWeights?.weights?.clean + 5;
+      } else {
+        weights.clean = lastWeights?.weights?.clean;
+      }
     }
-    if (data.press) {
-      weights.press = lastWeights?.weights?.press + 5;
+
+    if (data["press-day"]) {
+      if (data.press) {
+        weights.press = lastWeights?.weights?.press + 5;
+      } else {
+        weights.press = lastWeights?.weights?.press;
+      }
     }
+
+    console.log("data");
+    console.log("data");
+    console.log(weights);
+    console.log("data");
+    console.log("data");
+    console.log("data");
+
     if (data.row) {
       weights.row = data.row;
     }
@@ -90,22 +136,21 @@ const Workout: NextPage = () => {
       weights.chinup = data.chinup;
     }
 
-    const workoutSummary = {
+    const userWorkout = {
       weights,
-      notes: data.notes,
     };
+
+    if (data.notes) {
+      userWorkout.notes = data.notes;
+    }
 
     try {
       await updateWeights({ weights });
+
+      await addUserWorkout({ ...userWorkout });
     } catch (error) {
       console.log(error);
     }
-    console.log("data");
-    console.log("data");
-    console.log(weights);
-    console.log("data");
-    console.log("data");
-    console.log("data");
   });
 
   // handleSubmit(async (data) => {
