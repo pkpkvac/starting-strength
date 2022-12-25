@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import Image from "next/image";
+import { Platebreakdown } from "./Platebreakdown";
 
 export default function Exercise({ exercise, register }) {
   const [success, setSuccess] = useState(true);
@@ -42,13 +43,8 @@ export default function Exercise({ exercise, register }) {
 
         <div className="flex flex-col text-center">
           <label className="font-bold text-white">Plates</label>
-          <p>45x1</p>
-          <p>35x1</p>
-          <p>35x1</p>
-          <p>35x1</p>
-          <p>2.5x1</p>
 
-          {/* <Platebreakdown weight={weight} /> */}
+          <Platebreakdown weight={weight} />
         </div>
         <div className="flex flex-col text-center">
           <label className="font-bold text-white">Complete</label>

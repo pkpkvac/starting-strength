@@ -26,15 +26,13 @@ const Header: React.FC<React.ComponentPropsWithoutRef<"header">> = ({
         </Link>
       </div>
       <div className="m-5 flex items-center space-x-10">
-        <Link className="text-white" href="/generate">
-          Generate
-        </Link>
         <Link className="text-white" href="/">
           Charts
         </Link>
-        <Link className="text-white" href="/">
-          Log
+        <Link className="text-white" href="/generate">
+          Generate
         </Link>
+
         <Button
           onClick={userMe ? () => signOut() : () => signIn()}
           variant="secondary"

@@ -39,9 +39,7 @@ export default function Exercises({ lastWeights, register }) {
   return (
     <div className="flex flex-col gap-5 font-bold text-white">
       <p className="">{format(Date.now(), "E, MMM dd, yyyy ")}</p>
-      <p className="">{`Week ${
-        Math.floor((lastWeights?.day || 0) / 3) + 1
-      }, Day ${lastWeights?.day}`}</p>
+      <p className="">{`Week ${totalWeeks}, Day ${lastWeights?.day}`}</p>
 
       {exerciseList}
     </div>

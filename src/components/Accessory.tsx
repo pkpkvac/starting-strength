@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import minus from "@iconify-icons/ph/x-circle-bold";
 import Image from "next/image";
+import { Platebreakdown } from "./Platebreakdown";
 
 // import Select from "react-sele
 
@@ -46,13 +47,8 @@ export default function Accessory({ accessory, register, onRemoveAccessory }) {
 
         <div className="flex flex-col text-center">
           <label className="font-bold text-white">Plates</label>
-          <p>45x1</p>
-          <p>35x1</p>
-          <p>35x1</p>
-          <p>35x1</p>
-          <p>2.5x1</p>
 
-          {/* <Platebreakdown weight={weight} /> */}
+          <Platebreakdown weight={weight} />
         </div>
         <div className="flex flex-col text-center">
           <Icon

@@ -23,7 +23,11 @@ const Home: NextPage = () => {
       <Head>
         <title>Starting Strength | Home</title>
       </Head>
-      <div className="h-[100vh] w-full">
+      <div
+        className={`${
+          !pastWorkouts || pastWorkouts?.length < 3 ? "h-[100vh]" : "h-auto"
+        } w-full`}
+      >
         <div className="mx-auto flex w-3/4 justify-center rounded-3xl bg-primary-light p-10">
           <Button
             variant="primary"

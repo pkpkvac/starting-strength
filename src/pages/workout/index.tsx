@@ -26,6 +26,7 @@ const schema = z.object({
   curl: z.number().int().positive().optional(),
   tricep: z.number().int().positive().optional(),
   incline: z.number().int().positive().optional(),
+  chinup: z.number().int().positive().optional(),
 
   notes: z.string().optional(),
 });
@@ -41,44 +42,25 @@ const Workout: NextPage = () => {
     resolver: zodResolver(schema),
   });
 
-  console.log(errors);
-
   const lastWeights = trpc.weights.getWeights.useQuery()?.data?.payload;
 
-  // const {
-  //   mutate: submitWeights,
-  //   data,
-  //   isLoading,
-  // } = trpc.useMutation("weights.updateWeights");
-  // signOut();
   const { mutate: updateWeights, isLoading } =
-    trpc.weights.updateWeights.useMutation({
-      // onSuccess: () => {
-      //   router.push("/home");
-      // },
-    });
+    trpc.weights.updateWeights.useMutation({});
 
   const { mutate: addUserWorkout, isLoading: userWorkoutLoading } =
     trpc.userWorkouts.addUserWorkout.useMutation({
-      // onSuccess: () => {
-      //   router.push("/home");
-      // },
+      onSuccess: () => {
+        router.push("/home");
+      },
     });
 
   const onSubmit = handleSubmit(async (data) => {
-    // First update the weights table
-
-    console.log("data");
-    console.log("data");
-    console.log(data);
-    console.log("data");
-    console.log("data");
-    console.log("data");
-
     const weights = {};
 
     if (data.squat) {
       weights.squat = lastWeights?.weights?.squat + 5;
+    } else {
+      weights.squat = lastWeights?.weights?.squat;
     }
 
     if (data["deadlift-day"]) {
@@ -113,13 +95,6 @@ const Workout: NextPage = () => {
       }
     }
 
-    console.log("data");
-    console.log("data");
-    console.log(weights);
-    console.log("data");
-    console.log("data");
-    console.log("data");
-
     if (data.row) {
       weights.row = data.row;
     }
@@ -152,24 +127,6 @@ const Workout: NextPage = () => {
       console.log(error);
     }
   });
-
-  // handleSubmit(async (data) => {
-  //   console.log("data", data);
-  //   console.log("data", data);
-  //   console.log("data", data);
-
-  //   // const weights = {
-  //   //   squat: data.squat,
-  //   //   deadlift: data.deadlift,
-  //   //   bench: data.bench,
-  //   //   clean: data.clean,
-  //   //   press: data.press,
-  //   // };
-
-  //   // const res = await updateWeights({ weights });
-
-  //   // submitWeights({ weights: data });
-  // });
 
   return (
     <>
